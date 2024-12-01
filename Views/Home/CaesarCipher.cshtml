@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Szyfr Cezara";
+}
+
+<h2>Szyfr Cezara</h2>
+
+<form method="post">
+    <div>
+        <label for="inputText">Tekst do zaszyfrowania:</label>
+        <input type="text" id="inputText" name="inputText" />
+    </div>
+    <div>
+        <label for="shift">Przesunięcie:</label>
+        <input type="number" id="shift" name="shift" value="3" />
+    </div>
+    <button type="submit">Zaszyfruj</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <h3>Wynik:</h3>
+    <p>@ViewBag.Result</p>
+}
