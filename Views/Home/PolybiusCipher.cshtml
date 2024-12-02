@@ -1,0 +1,19 @@
+﻿@@{
+    ViewData["Title"] = "Szyfr Polibiusza";
+}
+
+<h2>Szyfr Polibiusza</h2>
+
+<form method="post">
+    <div>
+        <label for="inputText">Tekst do zaszyfrowania:</label>
+        <input type="text" id="inputText" name="inputText" />
+    </div>
+    <button type="submit">Zaszyfruj</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <h3>Wynik:</h3>
+    <p>@ViewBag.Result</p>
+}
