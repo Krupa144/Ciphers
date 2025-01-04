@@ -1,104 +1,167 @@
-using Chpiers.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Chpiers.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult CaesarCipher()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-
-        }
-        public IActionResult CaesarCipher() => View();
 
         [HttpPost]
-        public IActionResult CaesarCipher(string inputText, int shift)
+        public IActionResult EncryptCaesar(string inputText, int key)
         {
-            if (string.IsNullOrWhiteSpace(inputText))
+            if (string.IsNullOrEmpty(inputText))
             {
-                ViewBag.Result = "WprowadŸ tekst do zaszyfrowania!";
-            }
-            else
-            {
-                ViewBag.Result = EncryptWithCaesarCipher(inputText, shift);
+                ViewBag.Message = "Proszê wprowadziæ tekst do zaszyfrowania.";
+                return View("CaesarCipher");
             }
 
+            string encryptedText = CaesarEncrypt(inputText, key);
+            ViewBag.EncryptedText = encryptedText;
+            ViewBag.OriginalText = inputText;
+            ViewBag.Key = key;
+
+            return View("CaesarCipher");
+        }
+
+        [HttpPost]
+        public IActionResult DecryptCaesar(string inputText, int key)
+        {
+            if (string.IsNullOrEmpty(inputText))
+            {
+                ViewBag.Message = "Proszê wprowadziæ tekst do odszyfrowania.";
+                return View("CaesarCipher");
+            }
+
+            string decryptedText = CaesarEncrypt(inputText, -key);
+            ViewBag.DecryptedText = decryptedText;
+            ViewBag.OriginalText = inputText;
+            ViewBag.Key = key;
+
+            return View("CaesarCipher");
+        }
+
+        public IActionResult PolybiusCipher()
+        {
             return View();
         }
 
-        private string EncryptWithCaesarCipher(string text, int shift)
+        [HttpPost]
+        public IActionResult EncryptPolybius(string inputText)
         {
-            shift = shift % 26;
-            return new string(text.Select(c =>
+            if (string.IsNullOrEmpty(inputText))
             {
-                if (char.IsLetter(c))
+                ViewBag.Message = "Proszê wprowadziæ tekst do zaszyfrowania.";
+                return View("PolybiusCipher");
+            }
+
+            string encryptedText = PolybiusEncrypt(inputText);
+            ViewBag.EncryptedText = encryptedText;
+            ViewBag.OriginalText = inputText;
+
+            return View("PolybiusCipher");
+        }
+
+        [HttpPost]
+        public IActionResult DecryptPolybius(string inputText)
+        {
+            if (string.IsNullOrEmpty(inputText))
+            {
+                ViewBag.Message = "Proszê wprowadziæ tekst do odszyfrowania.";
+                return View("PolybiusCipher");
+            }
+
+            string decryptedText = PolybiusDecrypt(inputText);
+            ViewBag.DecryptedText = decryptedText;
+            ViewBag.OriginalText = inputText;
+
+            return View("PolybiusCipher");
+        }
+
+        private string CaesarEncrypt(string input, int key)
+        {
+            char[] buffer = input.ToCharArray();
+
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                char letter = buffer[i];
+                if (char.IsLetter(letter))
                 {
-                    char offset = char.IsUpper(c) ? 'A' : 'a';
-                    return (char)(((c + shift - offset) % 26 + 26) % 26 + offset);
+                    char offset = char.IsUpper(letter) ? 'A' : 'a';
+                    letter = (char)((letter + key - offset + 26) % 26 + offset);
                 }
-                return c;
-            }).ToArray());
-        }
-
-        public IActionResult PolybiusCipher() => View();
-
-        [HttpPost]
-        public IActionResult PolybiusCipher(string inputText)
-        {
-            if (string.IsNullOrWhiteSpace(inputText))
-            {
-                ViewBag.Result = "WprowadŸ tekst do zaszyfrowania!";
-            }
-            else
-            {
-                ViewBag.Result = EncryptWithPolybiusCipher(inputText);
+                buffer[i] = letter;
             }
 
-            return View();
+            return new string(buffer);
         }
 
-        private string EncryptWithPolybiusCipher(string text)
+        private string PolybiusEncrypt(string input)
         {
-            // Tabela szyfru Polibiusza
-            var polybiusSquare = new Dictionary<char, string>
-    {
-        {'A', "11"}, {'B', "12"}, {'C', "13"}, {'D', "14"}, {'E', "15"},
-        {'F', "21"}, {'G', "22"}, {'H', "23"}, {'I', "24"}, {'J', "24"}, // I i J maj¹ ten sam kod
-        {'K', "25"}, {'L', "31"}, {'M', "32"}, {'N', "33"}, {'O', "34"},
-        {'P', "35"}, {'Q', "41"}, {'R', "42"}, {'S', "43"}, {'T', "44"},
-        {'U', "45"}, {'V', "51"}, {'W', "52"}, {'X', "53"}, {'Y', "54"},
-        {'Z', "55"}
-    };
+            var table = new char[,]
+            {
+                {'A', 'B', 'C', 'D', 'E'},
+                {'F', 'G', 'H', 'I', 'K'}, 
+                {'L', 'M', 'N', 'O', 'P'},
+                {'Q', 'R', 'S', 'T', 'U'},
+                {'V', 'W', 'X', 'Y', 'Z'}
+            };
 
-            // Zamiana tekstu na wielkie litery i szyfrowanie
-            text = text.ToUpper();
-            var encrypted = text
-                .Where(c => char.IsLetter(c)) // Ignorowanie znaków nie bêd¹cych literami
-                .Select(c => polybiusSquare.ContainsKey(c) ? polybiusSquare[c] : "")
-                .ToArray();
+            input = input.ToUpper().Replace("J", "I");
+            string result = "";
 
-            return string.Join(" ", encrypted);
+            foreach (char letter in input)
+            {
+                if (char.IsLetter(letter))
+                {
+                    for (int row = 0; row < 5; row++)
+                    {
+                        for (int col = 0; col < 5; col++)
+                        {
+                            if (table[row, col] == letter)
+                            {
+                                result += $"{row + 1}{col + 1} ";
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result.Trim();
         }
 
+        private string PolybiusDecrypt(string input)
+        {
+            var table = new char[,]
+            {
+                {'A', 'B', 'C', 'D', 'E'},
+                {'F', 'G', 'H', 'I', 'K'},
+                {'L', 'M', 'N', 'O', 'P'},
+                {'Q', 'R', 'S', 'T', 'U'},
+                {'V', 'W', 'X', 'Y', 'Z'}
+            };
+
+            string result = "";
+            var pairs = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var pair in pairs)
+            {
+                if (pair.Length == 2 &&
+                    int.TryParse(pair[0].ToString(), out int row) &&
+                    int.TryParse(pair[1].ToString(), out int col))
+                {
+                    result += table[row - 1, col - 1];
+                }
+            }
+
+            return result;
+        }
     }
 }

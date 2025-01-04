@@ -1,19 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Szyfr Polibiusza";
+    ViewData["Title"] = "Polybius Cipher";
 }
 
-<h2>Szyfr Polibiusza</h2>
+<div class="container mt-5">
+    <h1 class="text-center">Polybius Cipher</h1>
+    <p class="text-center lead">Enter text to encrypt or decrypt using the Polybius cipher.</p>
 
-<form method="post">
-    <div>
-        <label for="inputText">Tekst do zaszyfrowania:</label>
-        <input type="text" id="inputText" name="inputText" />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="/Home/EncryptPolybius">
+                <div class="mb-3">
+                    <label for="inputText" class="form-label">Text to encrypt:</label>
+                    <textarea class="form-control" id="inputText" name="inputText" rows="4" placeholder="Enter your text..." required></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Encrypt <i class="bi bi-lock-fill"></i></button>
+                </div>
+            </form>
+
+            <form method="post" action="/Home/DecryptPolybius" class="mt-3">
+                <div class="mb-3">
+                    <label for="inputTextDecrypt" class="form-label">Text to decrypt:</label>
+                    <textarea class="form-control" id="inputTextDecrypt" name="inputText" rows="4" placeholder="Enter the encrypted text..." required></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-secondary">Decrypt <i class="bi bi-unlock-fill"></i></button>
+                </div>
+            </form>
+
+            @if (ViewBag.EncryptedText != null)
+            {
+                <div class="alert alert-success mt-4">
+                    <strong>Encrypted Text:</strong> @ViewBag.EncryptedText
+                </div>
+            }
+
+            @if (ViewBag.DecryptedText != null)
+            {
+                <div class="alert alert-info mt-4">
+                    <strong>Decrypted Text:</strong> @ViewBag.DecryptedText
+                </div>
+            }
+        </div>
     </div>
-    <button type="submit">Zaszyfruj</button>
-</form>
-
-@if (ViewBag.Result != null)
-{
-    <h3>Wynik:</h3>
-    <p>@ViewBag.Result</p>
-}
+</div>
