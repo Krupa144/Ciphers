@@ -11,7 +11,7 @@ html {
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.8;
-    color: #333;
+    color: #ffffff;
     margin: 0;
     padding: 0;
     background-color: #f8f9fa; 
@@ -22,9 +22,8 @@ header {
     top: 0;
     width: 100%;
     z-index: 1030;
-    background-color: #343a40; 
+    background-color: black; 
     color: #ffffff; 
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
     border: none; 
 }
 
@@ -36,12 +35,12 @@ header {
     header h1 {
         margin: 0;
         font-size: 2rem; 
-        text-align: center;
+        text-align: center; 
     }
 
 
 .navbar-toggler {
-    border-color: #007bff;
+    border-color: #0000;
 }
 
 .navbar-toggler-icon {
@@ -60,15 +59,13 @@ header {
 
 main {
     padding: 30px;
-    background: #ffffff;
+    background: black;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     border-radius: 12px; 
     margin: 20px 0;
 }
 
-header {
-   
-}
+
 
 .content {
     padding-top: 70px; 
@@ -83,7 +80,7 @@ footer {
 }
 
     footer a {
-        color: #007bff;
+        color: black;
         text-decoration: none;
         transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out; 
     }
@@ -127,4 +124,14 @@ button {
 
     .btn:hover {
         transform: translateY(-2px); 
+    }
+
+.btn-primary {
+    background-color: black !important;
+    border-color: black !important;
+}
+
+    .btn-primary:hover {
+        background-color: #333 !important; 
+        border-color: #333 !important;
     }
