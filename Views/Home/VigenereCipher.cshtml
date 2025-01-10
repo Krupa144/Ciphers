@@ -1,0 +1,50 @@
+﻿<div class="container mt-5">
+    <h1 class="text-center">Vigenère Cipher</h1>
+    <p class="text-center lead">Enter text, choose a key, and decide whether to encrypt or decrypt the text.</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="/Home/EncryptVigenere">
+                <div class="mb-3">
+                    <label for="inputText" class="form-label">Text to process:</label>
+                    <textarea class="form-control" id="inputText" name="inputText" rows="4" placeholder="Enter your text..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="key" class="form-label">Encryption Key:</label>
+                    <input type="text" class="form-control" id="key" name="key" placeholder="Enter key (e.g., SECRET)" required />
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Encrypt <i class="bi bi-lock-fill"></i></button>
+                </div>
+            </form>
+
+            <form method="post" action="/Home/DecryptVigenere" class="mt-4">
+                <div class="mb-3">
+                    <label for="inputTextDecrypt" class="form-label">Text to process:</label>
+                    <textarea class="form-control" id="inputTextDecrypt" name="inputText" rows="4" placeholder="Enter your text..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="keyDecrypt" class="form-label">Decryption Key:</label>
+                    <input type="text" class="form-control" id="keyDecrypt" name="key" placeholder="Enter key (e.g., SECRET)" required />
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-secondary">Decrypt <i class="bi bi-unlock-fill"></i></button>
+                </div>
+            </form>
+
+            @if (ViewBag.EncryptedText != null)
+            {
+                <div class="alert alert-success mt-4">
+                    <strong>Encrypted Text:</strong> @ViewBag.EncryptedText
+                </div>
+            }
+
+            @if (ViewBag.DecryptedText != null)
+            {
+                <div class="alert alert-info mt-4">
+                    <strong>Decrypted Text:</strong> @ViewBag.DecryptedText
+                </div>
+            }
+        </div>
+    </div>
+</div>

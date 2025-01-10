@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Chpiers.Controllers
@@ -281,5 +282,90 @@ namespace Chpiers.Controllers
             }
             return (-1, -1);
         }
+
+
+
+        public IActionResult VigenereCipher()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EncryptVigenere(string inputText, string key)
+        {
+            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            {
+                ViewBag.Message = "Please provide both text and a key.";
+                return View("VigenereCipher");
+            }
+
+            string encryptedText = VigenereEncrypt(inputText, key);
+            ViewBag.EncryptedText = encryptedText;
+
+            return View("VigenereCipher");
+        }
+
+        [HttpPost]
+        public IActionResult DecryptVigenere(string inputText, string key)
+        {
+            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            {
+                ViewBag.Message = "Please provide both text and a key.";
+                return View("VigenereCipher");
+            }
+
+            string decryptedText = VigenereDecrypt(inputText, key);
+            ViewBag.DecryptedText = decryptedText;
+
+            return View("VigenereCipher");
+        }
+
+        private string VigenereEncrypt(string input, string key)
+        {
+            StringBuilder result = new StringBuilder();
+            key = key.ToUpper();
+            int keyIndex = 0;
+
+            foreach (char letter in input)
+            {
+                if (char.IsLetter(letter))
+                {
+                    char offset = char.IsUpper(letter) ? 'A' : 'a';
+                    result.Append((char)((letter + key[keyIndex % key.Length] - 2 * offset) % 26 + offset));
+                    keyIndex++;
+                }
+                else
+                {
+                    result.Append(letter);
+                }
+            }
+
+            return result.ToString();
+        }
+
+        private string VigenereDecrypt(string input, string key)
+        {
+            StringBuilder result = new StringBuilder();
+            key = key.ToUpper();
+            int keyIndex = 0;
+
+            foreach (char letter in input)
+            {
+                if (char.IsLetter(letter))
+                {
+                    char offset = char.IsUpper(letter) ? 'A' : 'a';
+                    result.Append((char)((letter - key[keyIndex % key.Length] + 26) % 26 + offset));
+                    keyIndex++;
+                }
+                else
+                {
+                    result.Append(letter);
+                }
+            }
+
+            return result.ToString();
+        }
+       
     }
 }
+
