@@ -2,39 +2,53 @@
     ViewData["Title"] = "Caesar Cipher";
 }
 
-<div class="container mt-5">
-    <h1 class="text-center">Caesar Cipher</h1>
-    <p class="text-center lead">Enter text, choose a key, and decide whether to encrypt or decrypt the text.</p>
+<div class="content container text-center">
+    <h1 class="text-white">Caesar Cipher</h1>
+    <p class="text-muted">Encrypt and decrypt text using the Caesar Cipher method.</p>
+    <div class="card bg-dark text-white p-4">
+        <form asp-action="EncryptCaesar" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="inputText">Text to Encrypt</label>
+                <textarea class="form-control bg-secondary text-white" id="inputText" name="inputText" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="key">Key</label>
+                <input type="number" class="form-control bg-secondary text-white" id="key" name="key" />
+            </div>
+            <button type="submit" class="btn btn-primary">Encrypt</button>
+        </form>
 
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="post" action="/Home/EncryptCaesar">
-                <div class="mb-3">
-                    <label for="inputText" class="form-label">Text to process:</label>
-                    <textarea class="form-control" id="inputText" name="inputText" rows="4" placeholder="Enter your text..." required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="key" class="form-label">Encryption Key (Shift Value):</label>
-                    <input type="number" class="form-control" id="key" name="key" placeholder="Enter shift value (e.g., 3)" required />
-                </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Encrypt <i class="bi bi-lock-fill"></i></button>
-                </div>
-            </form>
+        <form asp-action="DecryptCaesar" method="post">
+            <div class="form-group">
+                <label for="inputTextDecrypt">Text to Decrypt</label>
+                <textarea class="form-control bg-secondary text-white" id="inputTextDecrypt" name="inputText" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="keyDecrypt">Key</label>
+                <input type="number" class="form-control bg-secondary text-white" id="keyDecrypt" name="key" />
+            </div>
+            <button type="submit" class="btn btn-primary">Decrypt</button>
+        </form>
 
-            @if (ViewBag.EncryptedText != null)
-            {
-                <div class="alert alert-success mt-4">
-                    <strong>Encrypted Text:</strong> @ViewBag.EncryptedText
-                </div>
-            }
+        @if (ViewBag.EncryptedText != null)
+        {
+            <div class="alert alert-success mt-3">
+                <strong>Encrypted Text:</strong> @ViewBag.EncryptedText
+            </div>
+        }
 
-            @if (ViewBag.DecryptedText != null)
-            {
-                <div class="alert alert-info mt-4">
-                    <strong>Decrypted Text:</strong> @ViewBag.DecryptedText
-                </div>
-            }
-        </div>
+        @if (ViewBag.DecryptedText != null)
+        {
+            <div class="alert alert-info mt-3">
+                <strong>Decrypted Text:</strong> @ViewBag.DecryptedText
+            </div>
+        }
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-warning mt-3">
+                @ViewBag.Message
+            </div>
+        }
     </div>
 </div>

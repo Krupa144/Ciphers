@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Chpiers.Controllers
@@ -40,7 +39,7 @@ namespace Chpiers.Controllers
                 return View("CaesarCipher");
             }
 
-            string decryptedText = CaesarEncrypt(inputText, -key);
+            string decryptedText = CaesarEncrypt(inputText, -key); 
             ViewBag.DecryptedText = decryptedText;
 
             return View("CaesarCipher");
@@ -81,7 +80,6 @@ namespace Chpiers.Controllers
             return View("PolybiusCipher");
         }
 
-        // Playfair Cipher Actions
         public IActionResult PlayfairCipher()
         {
             return View();
@@ -117,10 +115,45 @@ namespace Chpiers.Controllers
             return View("PlayfairCipher");
         }
 
+        public IActionResult VigenereCipher()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EncryptVigenere(string inputText, string key)
+        {
+            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            {
+                ViewBag.Message = "Please provide both text and a key.";
+                return View("VigenereCipher");
+            }
+
+            string encryptedText = VigenereEncrypt(inputText, key);
+            ViewBag.EncryptedText = encryptedText;
+
+            return View("VigenereCipher");
+        }
+
+        [HttpPost]
+        public IActionResult DecryptVigenere(string inputText, string key)
+        {
+            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            {
+                ViewBag.Message = "Please provide both text and a key.";
+                return View("VigenereCipher");
+            }
+
+            string decryptedText = VigenereDecrypt(inputText, key);
+            ViewBag.DecryptedText = decryptedText;
+
+            return View("VigenereCipher");
+        }
+
+
         private string CaesarEncrypt(string input, int key)
         {
             char[] buffer = input.ToCharArray();
-
             for (int i = 0; i < buffer.Length; i++)
             {
                 char letter = buffer[i];
@@ -131,7 +164,6 @@ namespace Chpiers.Controllers
                 }
                 buffer[i] = letter;
             }
-
             return new string(buffer);
         }
 
@@ -157,7 +189,6 @@ namespace Chpiers.Controllers
                     }
                 }
             }
-
             return result.ToString().Trim();
         }
 
@@ -202,31 +233,6 @@ namespace Chpiers.Controllers
         {
             char[,] grid = GeneratePlayfairGrid(key);
             return ProcessPlayfair(text, grid, false);
-        }
-
-        private char[,] GeneratePlayfairGrid(string key)
-        {
-            key = key.ToUpper().Replace("J", "I");
-            StringBuilder alphabet = new StringBuilder("ABCDEFGHIKLMNOPQRSTUVWXYZ");
-            StringBuilder uniqueKey = new StringBuilder();
-
-            foreach (char c in key)
-            {
-                if (!uniqueKey.ToString().Contains(c) && alphabet.ToString().Contains(c))
-                {
-                    uniqueKey.Append(c);
-                    alphabet.Replace(c.ToString(), string.Empty);
-                }
-            }
-
-            uniqueKey.Append(alphabet);
-            char[,] grid = new char[5, 5];
-            for (int i = 0; i < 25; i++)
-            {
-                grid[i / 5, i % 5] = uniqueKey[i];
-            }
-
-            return grid;
         }
 
         private string ProcessPlayfair(string text, char[,] grid, bool encrypt)
@@ -283,41 +289,29 @@ namespace Chpiers.Controllers
             return (-1, -1);
         }
 
-
-
-        public IActionResult VigenereCipher()
+        private char[,] GeneratePlayfairGrid(string key)
         {
-            return View();
-        }
+            key = key.ToUpper().Replace("J", "I");
+            StringBuilder alphabet = new StringBuilder("ABCDEFGHIKLMNOPQRSTUVWXYZ");
+            StringBuilder uniqueKey = new StringBuilder();
 
-        [HttpPost]
-        public IActionResult EncryptVigenere(string inputText, string key)
-        {
-            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            foreach (char c in key)
             {
-                ViewBag.Message = "Please provide both text and a key.";
-                return View("VigenereCipher");
+                if (!uniqueKey.ToString().Contains(c) && alphabet.ToString().Contains(c))
+                {
+                    uniqueKey.Append(c);
+                    alphabet.Replace(c.ToString(), string.Empty);
+                }
             }
 
-            string encryptedText = VigenereEncrypt(inputText, key);
-            ViewBag.EncryptedText = encryptedText;
-
-            return View("VigenereCipher");
-        }
-
-        [HttpPost]
-        public IActionResult DecryptVigenere(string inputText, string key)
-        {
-            if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(key))
+            uniqueKey.Append(alphabet);
+            char[,] grid = new char[5, 5];
+            for (int i = 0; i < 25; i++)
             {
-                ViewBag.Message = "Please provide both text and a key.";
-                return View("VigenereCipher");
+                grid[i / 5, i % 5] = uniqueKey[i];
             }
 
-            string decryptedText = VigenereDecrypt(inputText, key);
-            ViewBag.DecryptedText = decryptedText;
-
-            return View("VigenereCipher");
+            return grid;
         }
 
         private string VigenereEncrypt(string input, string key)
@@ -365,7 +359,7 @@ namespace Chpiers.Controllers
 
             return result.ToString();
         }
-       
     }
 }
+
 

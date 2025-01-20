@@ -4,44 +4,42 @@ html {
 
 @media (min-width: 768px) {
     html {
-        font-size: 16px; 
+        font-size: 16px;
     }
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.8;
-    color: #ffffff;
+    color: #000000; 
     margin: 0;
     padding: 0;
-    background-color:#ffffff; 
+    background-color: #ffffff;
 }
-
 
 header {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1030;
-    background-color: black; 
-    border: none; 
+    background-color: #ffffff; 
+    border-bottom: 1px solid #e0e0e0; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
     header .navbar-nav .nav-link {
         color: #ffffff; 
-        font-weight: 500; 
+        font-weight: 500;
     }
 
     header h1 {
         margin: 0;
-        font-size: 2rem; 
-        text-align: center; 
+        font-size: 2rem;
+        text-align: center;
     }
 
-
 .navbar-toggler {
-    border-color: #0000;
+    border-color: transparent;
 }
 
 .navbar-toggler-icon {
@@ -55,70 +53,99 @@ header {
 
 .container-fluid {
     text-decoration: none;
-    color: black;
+    color: #000000;
 }
 
 main {
     padding: 30px;
-    background: black;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    border-radius: 12px; 
+    background: #ffffff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     margin: 20px 0;
 }
 
-
-
 .content {
-    padding-top: 70px; 
-    padding-bottom: 60px; 
+    padding-top: 70px;
+    padding-bottom: 60px;
 }
 
-
-
-   
 button {
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; 
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    background-color: #000000; 
+    color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 50px;
 }
 
     button:hover {
-        background-color: #0056b3;
+        background-color: #333333; 
         color: #ffffff;
     }
 
 .text-muted {
-    color: #6c757d !important;
+    color: #666666 !important; 
 }
 
-
 .card {
+    background-color: #ffffff; 
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    color: #000000;
 }
 
     .card:hover {
-        transform: scale(1.05); 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+.form-control {
+    background-color: #ffffff; 
+    color: #000000;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+}
+
+    .form-control:focus {
+        background-color: #f9f9f9; 
+        color: #000000;
+        border-color: #000000;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
     }
 
 .btn {
-    border-radius: 50px; 
+    border-radius: 50px;
     padding: 10px 20px;
     transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    background-color: #000000; 
+    color: #ffffff;
+    border: 1px solid #000000;
 }
 
     .btn:hover {
-        transform: translateY(-2px); 
+        transform: translateY(-2px);
+        background-color: #333333; 
+        border-color: #000000;
     }
 
-.btn-primary {
-    background-color: black !important;
-    border-color: black !important;
+footer {
+    background-color: #ffffff; 
+    color: #000000; 
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #e0e0e0;
+    position: fixed; 
+    bottom: 0;
+    width: 100%;
 }
 
-    .btn-primary:hover {
-        background-color: #333 !important; 
-        border-color: #333 !important;
+    footer a {
+        color: #000000;
+        text-decoration: none;
     }
 
+        footer a:hover {
+            color: #666666; 
+            text-decoration: underline;
+        }
