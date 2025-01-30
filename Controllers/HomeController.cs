@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
+
+
 namespace Chpiers.Controllers
 {
     public class HomeController : Controller
@@ -39,7 +41,7 @@ namespace Chpiers.Controllers
                 return View("CaesarCipher");
             }
 
-            string decryptedText = CaesarEncrypt(inputText, -key); 
+            string decryptedText = CaesarEncrypt(inputText, -key);
             ViewBag.DecryptedText = decryptedText;
 
             return View("CaesarCipher");
@@ -169,24 +171,15 @@ namespace Chpiers.Controllers
 
         private string PolybiusEncrypt(string input)
         {
-            char[,] table = GeneratePolybiusTable();
+            Dictionary<char, string> polybiusDict = GeneratePolybiusDictionary();
             input = input.ToUpper().Replace("J", "I");
             StringBuilder result = new StringBuilder();
 
             foreach (char letter in input)
             {
-                if (char.IsLetter(letter))
+                if (polybiusDict.ContainsKey(letter))
                 {
-                    for (int row = 0; row < 5; row++)
-                    {
-                        for (int col = 0; col < 5; col++)
-                        {
-                            if (table[row, col] == letter)
-                            {
-                                result.Append($"{row + 1}{col + 1} ");
-                            }
-                        }
-                    }
+                    result.Append(polybiusDict[letter] + " ");
                 }
             }
             return result.ToString().Trim();
@@ -194,33 +187,66 @@ namespace Chpiers.Controllers
 
         private string PolybiusDecrypt(string input)
         {
-            char[,] table = GeneratePolybiusTable();
+            Dictionary<string, char> polybiusReverseDict = GeneratePolybiusReverseDictionary();
             string[] pairs = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             StringBuilder result = new StringBuilder();
 
             foreach (string pair in pairs)
             {
-                if (pair.Length == 2 &&
-                    int.TryParse(pair[0].ToString(), out int row) &&
-                    int.TryParse(pair[1].ToString(), out int col))
+                if (polybiusReverseDict.ContainsKey(pair))
                 {
-                    result.Append(table[row - 1, col - 1]);
+                    result.Append(polybiusReverseDict[pair]);
                 }
             }
-
             return result.ToString();
         }
 
-        private char[,] GeneratePolybiusTable()
+        private Dictionary<char, string> GeneratePolybiusDictionary()
         {
-            return new char[,]
+            char[,] table =
             {
-                {'A', 'B', 'C', 'D', 'E'},
-                {'F', 'G', 'H', 'I', 'K'},
-                {'L', 'M', 'N', 'O', 'P'},
-                {'Q', 'R', 'S', 'T', 'U'},
-                {'V', 'W', 'X', 'Y', 'Z'}
-            };
+        {'A', '•', 'B', 'C', '∆'},
+        {'D', 'E', ' ', 'F', 'G'},
+        {'H', 'I', 'J', 'K', 'L'},
+        {'£', 'M', 'N', '—', 'O'},
+        {'”', 'P', 'R', 'S', 'å'},
+        {'T', 'U', 'W', 'Y', 'Z'},
+        {'è', 'Ø', 'X', 'V', 'Q'}
+    };
+
+            Dictionary<char, string> dict = new Dictionary<char, string>();
+            for (int row = 0; row < table.GetLength(0); row++)
+            {
+                for (int col = 0; col < table.GetLength(1); col++)
+                {
+                    dict[table[row, col]] = $"{row + 1}{col + 1}";
+                }
+            }
+            return dict;
+        }
+
+        private Dictionary<string, char> GeneratePolybiusReverseDictionary()
+        {
+            char[,] table =
+            {
+        {'A', '•', 'B', 'C', '∆'},
+        {'D', 'E', ' ', 'F', 'G'},
+        {'H', 'I', 'J', 'K', 'L'},
+        {'£', 'M', 'N', '—', 'O'},
+        {'”', 'P', 'R', 'S', 'å'},
+        {'T', 'U', 'W', 'Y', 'Z'},
+        {'è', 'Ø', 'X', 'V', 'Q'}
+    };
+
+            Dictionary<string, char> dict = new Dictionary<string, char>();
+            for (int row = 0; row < table.GetLength(0); row++)
+            {
+                for (int col = 0; col < table.GetLength(1); col++)
+                {
+                    dict[$"{row + 1}{col + 1}"] = table[row, col];
+                }
+            }
+            return dict;
         }
 
         private string PlayfairEncrypt(string text, string key)
@@ -361,5 +387,3 @@ namespace Chpiers.Controllers
         }
     }
 }
-
-
